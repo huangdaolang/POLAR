@@ -1,0 +1,66 @@
+# @package _global_
+
+defaults:
+  - /model/tabpfn@models.tabpfn
+  - /model/tabicl@models.tabicl
+  - /model/gp@models.gp
+  - /task: gp_regression
+  - /paths: local
+  - /hydra: default
+  - _self_
+
+seed: 42
+device: cpu
+
+task:
+  split: test
+
+compare:
+  methods: [polar,gp_weighted_variance_reduction,gp_variance_reduction,gp_uncertainty,gp_random]
+
+policy:
+  # Backbone paired with the canonical `polar` method key.
+  backend: tabicl
+  # Fallback path used when policy.checkpoints.<method/backend> is not set.
+  default_checkpoint_path: null
+  # checkpoints:
+  #   polar: /abs/path/to/polar/checkpoint.pt
+  #   polar_weighted: /abs/path/to/polar_weighted/checkpoint.pt
+  # CLI note: use +policy.checkpoints.<key>=... when adding a new key via Hydra overrides.
+  checkpoints: {}
+  strict_backbone_state: true
+  selection: argmax  # argmax | sample
+  type: null
+  hidden_dim: null
+  num_layers: null
+  num_heads: null
+  ffn_dim: null
+  activation: null
+  dropout: null
+  use_remaining_budget: null  # infer from checkpoint; legacy checkpoints default to false
+  budget_scale: null          # restore the training scale, even for a different eval budget
+
+eval:
+  num_episodes: 100  # Per benchmark function; total GP trajectories for gp_regression.
+  num_acquisitions: 20
+  # Controls the weighted reporting metrics only; policy checkpoints are evaluated as trained.
+  target_weighting: exp_y  # uniform | exp_y | step_pos
+  target_weight_beta: 10.0
+  target_weight_threshold: 0.5  # Used only when target_weighting=step_pos
+  confidence_interval_std: 1.96
+  plot_uncertainty: ci95  # ci95 | std | sem
+  dataset_ids: null
+  seeds: null
+  shuffle_query_pool: true
+
+output:
+  experiment_name: evaluate_al_${task.name}
+  run_tag: null
+  save_plots: true
+  gp_plot_num_episodes: 8
+  gp_plot_round_stride: 1
+  # For benchmark_functions: number of episode seeds to visualize per benchmark dataset.
+  benchmark_plot_num_episodes_per_dataset: 1
+  # For benchmark_functions: snapshot every n acquisition rounds in each rollout grid.
+  benchmark_plot_round_stride: 1
+  save_metrics: true

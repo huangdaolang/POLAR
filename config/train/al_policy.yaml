@@ -1,0 +1,43 @@
+finetune_epochs: 10000  # 0 = keep backbone frozen; N > 0 = finetune backbone for first N epochs
+
+num_epochs: 10000
+batch_size: 50
+num_acquisitions: 20
+log_every: 10
+save_every: 10
+
+policy_head:
+  type: target_aware_transformer  # mlp | target_aware_transformer
+  hidden_dim: 128
+  num_layers: 1
+  activation: gelu
+  dropout: 0.0
+  # Optional for both MLP and target-aware FFNs; disabled by default for AL.
+  use_remaining_budget: false
+  budget_scale: ${train.num_acquisitions}  # fixed reference, also used at evaluation
+  # Target-aware transformer options (ignored when type=mlp):
+  num_heads: 4
+  ffn_dim: 1024
+
+loss:
+  nll_weight: 1.0
+  policy_weight: 1.0
+  gamma: 0.0  # 0 = immediate reward; 1 = undiscounted reward-to-go (as in BO/BED).
+  reward_clamp_min: 0.0
+  normalize_rewards: true
+  detach_policy_features: true
+  # Appendix C loss-driven AL; use uniform for ordinary AL.
+  policy_target_weighting: exp_y  # uniform | exp_y | step_pos
+  policy_target_weight_beta: 10.0  # exp_y: exp(beta * y); step_pos: beta if y > threshold else 1
+  policy_target_weight_threshold: 0.0  # Used only when policy_target_weighting=step_pos
+
+optim:
+  use_amp: true
+  gradient_checkpointing: false  # set true for high-dim inputs when finetuning the backbone
+  lr_policy: 1.0e-5
+  lr_backbone: 1.0e-5
+  warmup_epochs: 0              # linear warmup epochs (0 = disabled)
+  min_lr_ratio: 1.0             # floor LR as fraction of peak (0 = decay to zero)
+  weight_decay_policy: 0.0
+  weight_decay_backbone: 0.0
+  grad_clip_norm: 1.0

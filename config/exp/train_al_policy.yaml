@@ -1,0 +1,36 @@
+# @package _global_
+
+defaults:
+  - /model: tabicl
+  - /task: gp_regression
+  - /train: al_policy
+  - /paths: local
+  - /hydra: default
+  - _self_
+
+seed: 41
+device: cpu
+
+output:
+  experiment_name: al_${task.name}/${model.name}
+  run_tag: null
+  save_probe_plots: false
+
+probe:
+  enabled: false
+  every_epochs: 100
+  seed: probe0
+  selection: argmax
+  snapshot_round_stride: 1
+  num_acquisitions: ${train.num_acquisitions}
+  ci_std: 1.96
+
+wandb:
+  enabled: false
+  project: polar
+  entity: null
+  run_name: null
+  group: null
+  tags: []
+  mode: online  # online | offline | disabled
+  dir: null

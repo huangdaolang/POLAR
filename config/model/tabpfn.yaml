@@ -1,0 +1,7 @@
+name: tabpfn
+version: v2.5
+checkpoint_path: null
+checkpoint_kind: auto
+num_classes: null
+strict_load: true
+cache_trainset_representation: false

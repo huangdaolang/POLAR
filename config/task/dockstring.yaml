@@ -1,0 +1,40 @@
+name: dockstring
+family: bayesian_optimization
+
+raw_data_path: ${paths.repo_root}/data/dockstring/dockstring-dataset.tsv
+cache_path: ${paths.repo_root}/data/dockstring/cache/random10k_seed42_morgan512.pt
+
+split: train  # train | test
+subset_size: 10000
+subset_seed: 42
+
+representation:
+  type: morgan
+  radius: 2
+  n_bits: 512
+
+train_targets:
+  - JAK2
+  - KIT
+  - LCK
+  - SRC
+  - IGF1R
+  - ABL1
+  - MET
+  - EGFR
+
+test_targets:
+  - PTK2
+  - FGFR1
+  - CSF1R
+  - CDK2
+  - MAPK14
+  - KDR
+
+# For train episodes.
+n_context_init: 10
+n_query: 500
+n_target: 0
+
+normalize_targets: false
+negate_scores: true

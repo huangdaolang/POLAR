@@ -1,0 +1,18 @@
+# @package _global_
+
+defaults:
+  - /exp/train_bo_policy
+  - override /task: dockstring
+  - _self_
+
+task:
+  n_target: 50
+
+train:
+  num_epochs: 1000
+  finetune_epochs: 1000
+  batch_size: 32
+  num_acquisitions: 50
+  optim:
+    lr_policy: 1.0e-3
+    lr_backbone: 3.0e-4

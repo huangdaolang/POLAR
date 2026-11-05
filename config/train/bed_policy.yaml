@@ -1,0 +1,53 @@
+finetune_epochs: 0  # 0 = keep backbone frozen; N > 0 = finetune backbone for first N epochs
+
+num_epochs: 1000
+batch_size: 20
+num_acquisitions: 30
+log_every: 10
+save_every: 50
+
+policy_head:
+  hidden_dim: 128
+  num_layers: 2
+  activation: gelu
+  dropout: 0.0
+  use_remaining_budget: true
+  budget_scale: ${train.num_acquisitions}  # fixed reference, also used at evaluation
+
+loss:
+  nll_weight: 1.0            # set >0 to enable target NLL during finetune epochs when task.n_target > 0
+  policy_weight: 1.0
+  gamma: 0.0                 # 1.0 = non-myopic, 0.0 = myopic
+  use_baseline: true
+  baseline_momentum: 0.99
+  normalize_rewards: true
+  detach_policy_features: true
+
+optim:
+  use_amp: true
+  gradient_checkpointing: false  # set true for high-dim inputs
+  lr_policy: 3.0e-4
+  lr_backbone: 1.0e-4
+  weight_decay_policy: 0.0
+  weight_decay_backbone: 0.0
+  grad_clip_norm: 1.0
+  warmup_epochs: 0              # linear warmup epochs (0 = disabled)
+  min_lr_ratio: 1.0             # floor LR as fraction of peak (0 = decay to zero)
+
+eval:
+  eval_interval: 50        # evaluate every N epochs (0 = disabled)
+  n_eval_episodes: 1000
+  n_contrastive_eval: 1000000  # L_eval for accurate sPCE/sNMC bounds
+  n_query_eval: 2000         # eval pool size (null = same as task.n_query)
+  greedy: true
+  n_plot_episodes: 8         # trajectories to include in eval plot (0 = no plot)
+
+heavy_eval:
+  enabled: false
+  likelihood_eval_milestones: [1000, 10000, 100000]  # trigger when total training likelihood evals first reach/exceed each value; counts acquisitions plus target points in epochs where target NLL is active
+  n_eval_episodes: 1000
+  n_contrastive_eval: ${train.eval.n_contrastive_eval}
+  n_query_eval: ${train.eval.n_query_eval}
+  greedy: ${train.eval.greedy}
+  n_plot_episodes: 0
+  save_checkpoint: true

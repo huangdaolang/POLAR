@@ -1,0 +1,19 @@
+name: location_finding
+family: bayesian_experimental_design
+
+dim_x: 5
+K: 2                          # number of hidden sources
+n_contrastive: 9999           # L contrastive theta samples (total L+1=10000)
+n_context_init: 1
+n_query: 1000                # candidate pool size
+n_target: 0                 # 0 = no target set; set >0 to provide target NLL during finetune epochs
+
+design_min: 0.0
+design_max: 1.0
+
+signal:
+  base_signal: 0.1
+  max_signal: 1.0e-4
+  noise_scale: 0.5
+
+theta_prior: uniform         # "normal" | "uniform"

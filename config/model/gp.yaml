@@ -1,0 +1,5 @@
+name: gp
+kernel: rbf
+training_steps: 75
+learning_rate: 0.1
+initial_noise: 1.0e-3

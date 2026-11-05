@@ -1,0 +1,68 @@
+# @package _global_
+
+defaults:
+  - /model/tabpfn@models.tabpfn
+  - /model/tabicl@models.tabicl
+  - /model/gp@models.gp
+  - /model/rf@models.rf
+  - /task: hpob
+  - /paths: local
+  - /hydra: default
+  - _self_
+
+seed: 42
+device: cpu
+
+task:
+  split: test
+
+compare:
+  # Examples:
+  #   compare.methods='[polar,gp_ei,random]'
+  #   compare.methods='[polar,tabicl_ei_mc,rf_ei,gp_ei,random]'
+  methods: ???
+
+policy:
+  # Backbone paired with the canonical `polar` method key.
+  backend: tabicl
+  # Fallback path used when policy.checkpoints.<method/backend> is not set.
+  default_checkpoint_path: null
+  # Optional policy checkpoint source:
+  # - single path string: policy.checkpoints=/abs/path/to/single_policy.ckpt
+  # - per-method/per-backend map, e.g.:
+  # checkpoints:
+  #   polar: /abs/path/to/polar/checkpoint.pt
+  #   tabicl: /abs/path/to/a/shared/tabicl/policy.ckpt
+  # CLI note: use +policy.checkpoints.<key>=... when adding a new key via Hydra overrides.
+  checkpoints: {}
+  strict_backbone_state: true
+  selection: argmax  # argmax | sample
+  hidden_dim: null
+  num_layers: null
+  activation: null
+  dropout: null
+  use_remaining_budget: null  # infer from checkpoint; legacy checkpoints default to false
+  budget_scale: null          # restore the training scale, even for a different eval budget
+
+eval:
+  num_acquisitions: 50
+  query_pool_size: 0  # 0 or less = use the full pending pool after initialization
+  ei_mc_samples: 32
+  maximize: true
+  max_query_chunk: 500  # chunk size for policy/surrogate inference; 0 or null = no chunking
+  metric: normalized_regret  # regret | normalized_regret
+  plot_uncertainty: ci95  # ci95 | std | sem
+  seeds:
+    - test0
+    - test1
+    - test2
+    - test3
+    - test4
+  dataset_ids: null
+  shuffle_query_pool: true
+
+output:
+  experiment_name: evaluate_bo_${task.name}
+  run_tag: null
+  save_plots: true
+  save_metrics: true

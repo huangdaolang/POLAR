@@ -1,0 +1,26 @@
+# @package _global_
+
+defaults:
+  - /model: tabicl
+  - /task: location_finding
+  - /train: bed_policy
+  - /paths: local
+  - /hydra: default
+  - _self_
+
+seed: 42
+device: cpu
+
+output:
+  experiment_name: bed_${task.name}/${model.name}
+  run_tag: null
+
+wandb:
+  enabled: false
+  project: polar
+  entity: null
+  run_name: null
+  group: null
+  tags: []
+  mode: online  # online | offline | disabled
+  dir: null

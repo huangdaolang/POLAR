@@ -1,0 +1,39 @@
+finetune_epochs: 20  # 0 = keep backbone frozen; N > 0 = finetune backbone for first N epochs
+
+num_epochs: 20
+batch_size: 8
+num_acquisitions: 50
+log_every: 10
+save_every: 10
+
+policy_head:
+  hidden_dim: 128
+  num_layers: 2
+  activation: gelu
+  dropout: 0.0
+  use_remaining_budget: true
+  budget_scale: ${train.num_acquisitions}  # fixed reference, also used at evaluation
+
+loss:
+  nll_weight: 1.0  # set >0 to enable target NLL during finetune epochs when task.n_target > 0
+  policy_weight: 1.0
+  gamma: 0.0  # 0 = immediate reward; 1 = undiscounted reward-to-go
+  reward_type: regret_reduction  # best_y | incremental | regret_reduction | log_regret_reduction
+  reward_log_epsilon: 1.0e-6
+  reward_scale_by_range: true
+  reward_no_improve_penalty: 0.0
+  reward_clamp_min: null
+  normalize_rewards: true
+  reward_normalization_scope: batch  # episode | batch
+  detach_policy_features: true
+
+optim:
+  use_amp: true
+  gradient_checkpointing: false  # set true for high-dim inputs, TODO: conflict with AMP=true
+  lr_policy: 5.0e-3
+  lr_backbone: 1.0e-4
+  warmup_epochs: 0              # linear warmup epochs (0 = disabled)
+  min_lr_ratio: 1.0             # floor LR as fraction of peak (0 = decay to zero)
+  weight_decay_policy: 0.0
+  weight_decay_backbone: 0.0
+  grad_clip_norm: 1.0

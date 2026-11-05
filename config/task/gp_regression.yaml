@@ -1,0 +1,38 @@
+name: gp_regression
+family: active_learning
+split: train  # train | test
+
+# Data split semantics:
+# - context: observed points available to the model
+# - query: candidate points for next acquisition
+# - target: held-out evaluation points (never acquired)
+dim_x: 1
+dim_x_min: 1
+dim_x_max: 1
+n_context_init: 2
+n_query: 200
+n_target: 100
+
+design_min: -5.0
+design_max: 5.0
+noise_std: 0.0
+plot_grid_size: 400
+
+gp_prior:
+  kernels: [rbf, matern12, matern32, matern52]
+  lengthscale_min: 0.1
+  lengthscale_max: 2.0
+  lengthscale_sampling: log_uniform
+  scale_min: 0.1
+  scale_max: 1.0
+  p_isotropic: 1.0
+  standardize_x: true
+  standardize_y: true
+  jitter: 1.0e-6
+  cholesky_max_tries: 8
+  jitter_growth: 10.0
+  kernel_weights:
+    rbf: 0.34
+    matern12: 0.0
+    matern32: 0.33
+    matern52: 0.33

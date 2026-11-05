@@ -1,0 +1,14 @@
+name: ces
+family: bayesian_experimental_design
+
+n_goods: 3
+n_contrastive: 99999
+n_context_init: 1
+n_query: 1000
+n_target: 50
+
+design_min: 0.0
+design_max: 100.0
+
+noise_scale: 0.005
+epsilon: 2.384185791015625e-07  # 2^-22

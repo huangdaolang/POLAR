@@ -1,0 +1,19 @@
+name: benchmark_functions
+family: active_learning
+split: test
+
+benchmarks:
+  - forrester
+  - gramacy_lee_2012
+  - higdon_2002
+  - sine_gaussian_bumps
+
+n_context_init: 2
+n_query: 200
+n_target: 100
+
+normalize_x: true
+normalize_y: true
+normalization_num_samples: 8192
+num_eval_episodes: 100
+group_by_dim: true

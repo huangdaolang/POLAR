@@ -1,0 +1,36 @@
+# @package _global_
+
+defaults:
+  - /task: gp_regression
+  - /paths: local
+  - /hydra: default
+  - _self_
+
+seed: 42
+
+task:
+  dim_x: 1
+  dim_x_min: 1
+  dim_x_max: 1
+  n_context_init: 1
+  n_query: 25
+  n_target: 25
+  gp_prior:
+    kernels: [rbf, matern32, matern52]
+    kernel_weights:
+      rbf: 0.34
+      matern32: 0.33
+      matern52: 0.33
+    lengthscale_sampling: log_uniform
+    standardize_x: true
+    standardize_y: true
+  noise_std: 0.0
+
+inspect:
+  num_samples: 30
+  show_raw: true
+  show_standardized: true
+
+output:
+  experiment_name: inspect_gp_prior
+  run_tag: null

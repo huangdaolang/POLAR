@@ -1,0 +1,46 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environments
+.venv/
+venv/
+*.egg-info/
+/build/
+/dist/
+
+# Model weights stay out of Git, but keep the expected directory skeleton so a
+# downloaded checkpoint has somewhere to go without the user creating folders.
+/checkpoints/**
+!/checkpoints/**/
+!/checkpoints/**/.gitkeep
+
+# Private planning / notes
+CLAUDE.md
+AGENTS.md
+
+# Local cluster launchers
+/launcher/
+
+# Local experiment assets and outputs
+/figures/
+/data/
+/results/
+/notebooks/final_results/
+
+# OS
+.DS_Store
+
+# Local editor/workspace files
+.idea/
+.claude/
+
+# Local run outputs
+/outputs/
+/scripts/outputs/
+/out/
+

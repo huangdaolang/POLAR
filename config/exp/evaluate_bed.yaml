@@ -1,0 +1,46 @@
+# @package _global_
+
+defaults:
+  - /model/tabpfn@models.tabpfn
+  - /model/tabicl@models.tabicl
+  - /task: location_finding
+  - /paths: local
+  - /hydra: default
+  - _self_
+
+seed: 42
+device: cpu
+
+compare:
+  # Examples:
+  #   compare.methods='[polar,random]'
+  #   compare.methods='[tabicl_polar,tabpfn_polar]'   # backbone ablation
+  methods: ???
+
+policy:
+  # Backbone paired with the canonical `polar` method key.
+  backend: tabicl
+  default_checkpoint_path: null
+  checkpoints: {}
+  strict_backbone_state: true
+  selection: argmax  # argmax | sample
+  hidden_dim: null
+  num_layers: null
+  activation: null
+  dropout: null
+  use_remaining_budget: null  # infer from checkpoint; legacy checkpoints default to false
+  budget_scale: null          # restore the training scale, even for a different eval budget
+
+eval:
+  num_acquisitions: 30
+  n_eval_episodes: 1000
+  n_contrastive_eval: 1000000    # L_eval for accurate sPCE/sNMC bounds
+  n_query_eval: 2000             # null = same as task.n_query
+  n_plot_episodes: 8             # For location finding task; 0 = no plot
+  plot_uncertainty: sem          # ci95 | std | sem
+
+output:
+  experiment_name: evaluate_bed_${task.name}
+  run_tag: null
+  save_plots: true
+  save_metrics: true

@@ -1,0 +1,11 @@
+# @package hydra
+
+# Central Hydra runtime behavior for this repo.
+# Default: do not generate outputs/YYYY-MM-DD/.../.hydra metadata folders.
+defaults:
+  - override hydra_logging: disabled
+  - override job_logging: disabled
+
+run:
+  dir: .
+output_subdir: null

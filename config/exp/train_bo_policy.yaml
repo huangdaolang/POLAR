@@ -1,0 +1,29 @@
+# @package _global_
+
+defaults:
+  - /model: tabicl
+  - /task: hpob
+  - /train: bo_policy
+  - /paths: local
+  - /hydra: default
+  - _self_
+
+seed: 42
+device: cpu
+
+task:
+  split: train
+
+output:
+  experiment_name: bo_${task.name}/${model.name}
+  run_tag: null
+
+wandb:
+  enabled: false
+  project: polar
+  entity: null
+  run_name: null
+  group: null
+  tags: []
+  mode: online  # online | offline | disabled
+  dir: null

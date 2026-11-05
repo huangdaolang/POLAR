@@ -1,0 +1,13 @@
+name: hpob
+family: bayesian_optimization
+
+data_root: ${paths.repo_root}/data/hpob
+search_space_id: "5527"
+split: test  # train | validation | test
+
+# For train/validation post-training episodes.
+n_context_init: 5
+n_query: 128
+n_target: 64
+
+normalize_targets: false
